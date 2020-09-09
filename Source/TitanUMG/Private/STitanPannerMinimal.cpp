@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-
-#include "TitanPannerMinimal.h"
 #include "STitanPannerMinimal.h"
+#include "TitanPannerMinimal.h"
+
 
 
 

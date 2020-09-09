@@ -3,10 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InputCoreTypes.h"
-#include "TitanPannerMinimal.h"
 #include "Input/Reply.h"
-#include "Brushes/SlateDynamicImageBrush.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Widgets/SLeafWidget.h"
 
@@ -14,7 +11,7 @@ class FPaintArgs;
 class FSlateWindowElementList;
 class UTitanPannerMinimal;
 /**
-* A virtual joystsick
+* Light weight Panner
 */
 class TITANUMG_API STitanPannerMinimal : public SLeafWidget
 {
