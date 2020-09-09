@@ -36,16 +36,24 @@ public:
 	virtual void Tick( const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime ) override;
 
 
-int8 Index1=-1;
-int8 Index2=-1;
-uint8 NumofTouches;
-bool HandleEvent;
 	/** The brush to use to draw the background for joysticks, or unclicked for buttons */
 	TSharedPtr< ISlateBrushSource > Image1;
+
+uint8 NumofTouches;
+	
+bool HandleEvent;
+
 virtual bool SupportsKeyboardFocus() const override;
 FVector2D Result;
+
+	//X=-1000 is considered null
 FVector2D Index1Location;
 FVector2D Index2Location;
+float LastPinchSize;
+float LastRotation;
+float  PinchResult;
+	float LastAngle;
+	float AngleResult;
 
 
 	/** The corrected size of a joystick that can be re-centered within InteractionSize area */
@@ -53,4 +61,5 @@ FVector2D Index2Location;
 UTitanPanner * Owner;
 public:
 
+	void SimulateTouch(FVector2D in);
 };

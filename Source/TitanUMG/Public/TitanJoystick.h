@@ -12,7 +12,8 @@
 #include "TitanJoystick.generated.h"
 
 /**
- * 
+ Wrapper for default UE4 Joysticks !
+ 
  */
 UCLASS()
 class TITANUMG_API UTitanJoystick : public UWidget

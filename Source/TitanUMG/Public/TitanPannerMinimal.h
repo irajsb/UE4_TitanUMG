@@ -7,14 +7,15 @@
 #include "Templates/SharedPointer.h"
 #include "CoreMinimal.h"
 #include "InputCoreTypes.h"
-#include "STitanPanner.h"
-#include "TitanPanner.generated.h"
+#include "STitanPannerMinimal.h"
+
+#include "TitanPannerMinimal.generated.h"
 
 /**
  Used for camera panning and for buttons that need to control Camera (Shoot button )
  */
 UCLASS()
-class TITANUMG_API UTitanPanner : public UWidget
+class TITANUMG_API UTitanPannerMinimal : public UWidget
 {
 	GENERATED_UCLASS_BODY()
 	public:
@@ -31,10 +32,7 @@ class TITANUMG_API UTitanPanner : public UWidget
 	FKey AltInputKey;
 	UPROPERTY(EditAnywhere, Category="Control", meta=(ToolTip="The alternate input to send from this control (for sticks, this is the vertical axis)"))
 	FKey PressInputKey;
-	UPROPERTY(EditAnywhere, Category="Control", meta=(ToolTip="The alternate input to send from this control (for sticks, this is the vertical axis)"))
-	FKey PinchInputKey;
-	UPROPERTY(EditAnywhere, Category="Control", meta=(ToolTip="The alternate input to send from this control (for sticks, this is the vertical axis)"))
-	FKey PinchRotateInputKey;
+
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category="Control", meta=(ToolTip="Color  of all controls while any control is active"))
 	FLinearColor ActiveColor;
@@ -46,13 +44,12 @@ class TITANUMG_API UTitanPanner : public UWidget
 	
 	virtual TSharedRef<SWidget> RebuildWidget()override;
 	const FText GetPaletteCategory();
-	TSharedPtr<STitanPanner> MyPanner;
+	TSharedPtr<STitanPannerMinimal> MyPanner;
 	UFUNCTION(BlueprintCallable)
     void SetVisualSize(FVector2D InVisualSize);
 	UFUNCTION(BlueprintCallable)
     void SetDeActiveColor(FLinearColor InDeActiveColor);
 	UFUNCTION(BlueprintCallable)
     void SetActiveColor(FLinearColor InActiveColor);
-	UFUNCTION(BlueprintCallable)
-	void SimulateTouch(FVector2D in);
+	
 };

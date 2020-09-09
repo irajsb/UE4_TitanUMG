@@ -1,11 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "STitanPanner.h"
-#include "TitanPanner.h"
+#include "TitanPannerMinimal.h"
+#include "STitanPannerMinimal.h"
 
 
 
-static FORCEINLINE float TGetScaleFactor(const FGeometry& Geometry)
+static FORCEINLINE float TMGetScaleFactor(const FGeometry& Geometry)
 {
 	const float DesiredWidth = 1024.0f;
 
@@ -14,7 +14,7 @@ static FORCEINLINE float TGetScaleFactor(const FGeometry& Geometry)
 }
 
 
-static int32 TResolveRelativePosition(float Position, float RelativeTo, float ScaleFactor)
+static int32 TIResolveRelativePosition(float Position, float RelativeTo, float ScaleFactor)
 {
 	// absolute from edge
 	if (Position < -1.0f)
@@ -44,12 +44,12 @@ static int32 TResolveRelativePosition(float Position, float RelativeTo, float Sc
 
 
 
-bool STitanPanner::SupportsKeyboardFocus() const
+bool STitanPannerMinimal::SupportsKeyboardFocus() const
 {
 	return false;
 }
 
-void STitanPanner::SimulateTouch(FVector2D in)
+void STitanPannerMinimal::SimulateTouch(FVector2D in)
 {
 	NumofTouches++;
 
@@ -59,12 +59,12 @@ Index1Location=in;
 }
 
 
-void STitanPanner::Construct(const FArguments& InArgs)
+void STitanPannerMinimal::Construct(const FArguments& InArgs)
 {
 
 }
 
-FReply STitanPanner::OnTouchStarted(const FGeometry& MyGeometry, const FPointerEvent& Event)
+FReply STitanPannerMinimal::OnTouchStarted(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
 	
 	
@@ -75,22 +75,13 @@ FReply STitanPanner::OnTouchStarted(const FGeometry& MyGeometry, const FPointerE
 
 	Index1Location=MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition() );
 	
-	}else if(NumofTouches==2)
-	{//two fingers
-		
-		Index2Location=	MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition());
-		const FVector2D Delta=Index1Location-Index2Location;
-		LastPinchSize=	(Delta).Size();
-		LastAngle=FMath::Atan2(Delta.Y,Delta.X)*180/PI;
-		
-	
 	}
 
 	return FReply::Handled().CaptureMouse(SharedThis(this));
 
 }
 
-FReply STitanPanner::OnTouchMoved(const FGeometry& MyGeometry, const FPointerEvent& Event)
+FReply STitanPannerMinimal::OnTouchMoved(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
 const FVector2D TouchLocation=	MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition());
 
@@ -100,18 +91,6 @@ const FVector2D TouchLocation=	MyGeometry.AbsoluteToLocal( Event.GetScreenSpaceP
 			Result=	Index1Location-TouchLocation ;
 			HandleEvent=true;
 			Index1Location= TouchLocation;
-		}else if(NumofTouches==2)
-		{
-			if(Index1Location.Equals(TouchLocation,200))
-			{
-				Index1Location=TouchLocation;
-
-			}
-			if(Index2Location.Equals(TouchLocation,200))
-			{
-				Index2Location=TouchLocation;
-			}
-			
 		}
 		
 		
@@ -119,16 +98,6 @@ const FVector2D TouchLocation=	MyGeometry.AbsoluteToLocal( Event.GetScreenSpaceP
  if(NumofTouches==2)
 	{
  	
- const FVector2D Delta=Index1Location-Index2Location;
- 	PinchResult= (Index1Location-Index2Location) .Size()-LastPinchSize;
-	LastPinchSize=(Index1Location-Index2Location) .Size();
- 	
-	AngleResult= FMath::Atan2(Delta.Y,Delta.X)*180/PI-LastAngle;
- 	LastAngle=FMath::Atan2(Delta.Y,Delta.X)*180/PI;
-
-
-	
-	
 	}
 
 	
@@ -136,10 +105,10 @@ const FVector2D TouchLocation=	MyGeometry.AbsoluteToLocal( Event.GetScreenSpaceP
 	
 }
 
-FReply STitanPanner::OnTouchEnded(const FGeometry& MyGeometry, const FPointerEvent& Event)
+FReply STitanPannerMinimal::OnTouchEnded(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {if(NumofTouches==2)
 {
-	PinchResult=0;
+	
 }
 
 
@@ -159,7 +128,7 @@ FReply STitanPanner::OnTouchEnded(const FGeometry& MyGeometry, const FPointerEve
 	
 }
 
-void STitanPanner::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+void STitanPannerMinimal::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 	
 	
@@ -204,36 +173,22 @@ if(HandleEvent)
 		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, 0);
 		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, 0);
 	}
-	float ScaleFactor = TGetScaleFactor(AllottedGeometry);
-	Owner->VisualCenter = FVector2D(TResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().X, ScaleFactor), TResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().Y, ScaleFactor));
+	float ScaleFactor = TMGetScaleFactor(AllottedGeometry);
+	Owner->VisualCenter = FVector2D(TIResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().X, ScaleFactor), TIResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().Y, ScaleFactor));
 	
-	CorrectedVisualSize = FVector2D(TResolveRelativePosition(Owner->VisualSize.X, AllottedGeometry.GetLocalSize().X, ScaleFactor), TResolveRelativePosition(Owner->VisualSize.Y, AllottedGeometry.GetLocalSize().Y, ScaleFactor));
+	CorrectedVisualSize = FVector2D(TIResolveRelativePosition(Owner->VisualSize.X, AllottedGeometry.GetLocalSize().X, ScaleFactor), TIResolveRelativePosition(Owner->VisualSize.Y, AllottedGeometry.GetLocalSize().Y, ScaleFactor));
 
-			if(NumofTouches==2)
-			{	if(Owner->PinchInputKey.IsValid())
-			{
-				const FGamepadKeyNames::Type Pinch = Owner->PinchInputKey.GetFName() ;
-				FSlateApplication::Get().OnControllerAnalog(Pinch, 0, PinchResult);
-				PinchResult=0;
-			}
-				if(Owner->PinchRotateInputKey.IsValid())
-				{
-					const FGamepadKeyNames::Type PinchRotate = Owner->PinchInputKey.GetFName() ;
-					FSlateApplication::Get().OnControllerAnalog(PinchRotate, 0, AngleResult);
-					AngleResult=0;
-				}
-				
-			}
+		
 }
 
 
 
-FVector2D STitanPanner::ComputeDesiredSize( float ) const
+FVector2D STitanPannerMinimal::ComputeDesiredSize( float ) const
 {
 	return FVector2D(100, 100);
 }
 
-int32 STitanPanner::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect,
+int32 STitanPannerMinimal::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect,
 	FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle,
 	bool bParentEnabled) const
 {

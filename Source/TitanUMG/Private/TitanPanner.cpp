@@ -2,6 +2,7 @@
 
 
 #include "TitanPanner.h"
+#include "Slate/DeferredCleanupSlateBrush.h"
 #define LOCTEXT_NAMESPACE "UMG"
 
 UTitanPanner::UTitanPanner(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
@@ -17,6 +18,11 @@ InputScale=FVector2D(1,1);
 
 void UTitanPanner::SetActiveColor(FLinearColor InActiveColor)
 {ActiveColor=InActiveColor;
+}
+
+void UTitanPanner::SimulateTouch(FVector2D in)
+{
+ MyPanner->SimulateTouch(in);
 }
 
 TSharedRef<SWidget> UTitanPanner::RebuildWidget()
