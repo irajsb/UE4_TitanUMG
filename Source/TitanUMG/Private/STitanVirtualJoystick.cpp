@@ -115,7 +115,7 @@ int32 STitanVirtualJoystick::OnPaint( const FPaintArgs& Args, const FGeometry& A
 				VisualCenter - FVector2D(CorrectedVisualSize.X * 0.5f, CorrectedVisualSize.Y * 0.5f),
 				CorrectedVisualSize),
 					Owner->Image2->GetSlateBrush(),
-					ESlateDrawEffect::None,
+					static_cast<ESlateDrawEffect>(Owner->BackGroundDrawEffect),
 					CurrentColor
 					);
 			}
@@ -129,10 +129,17 @@ int32 STitanVirtualJoystick::OnPaint( const FPaintArgs& Args, const FGeometry& A
 					VisualCenter + ThumbPosition - FVector2D(CorrectedThumbSize.X * 0.5f, CorrectedThumbSize.Y * 0.5f),
 					CorrectedThumbSize),
 					Owner->Image1->GetSlateBrush(),
-					ESlateDrawEffect::None,
+					static_cast<ESlateDrawEffect>(Owner->ThumbDrawEffect),
 					CurrentColor
 					);
 			}
+		if(Owner->TextToShow!=FString("NULL"))
+		{
+			FSlateDrawElement::MakeText(OutDrawElements,
+			RetLayerId++,AllottedGeometry.ToPaintGeometry(
+                VisualCenter -Owner->FontInfo.Size* FVector2D(CorrectedVisualSize.X , CorrectedVisualSize.Y )*Owner->FontCenterCorrection,
+                CorrectedVisualSize),Owner->TextToShow,Owner->FontInfo,static_cast<ESlateDrawEffect>(Owner->TextDrawEffect),Owner->TextColor);
+		}
 		
 	}
 	
@@ -151,7 +158,11 @@ bool STitanVirtualJoystick::SupportsKeyboardFocus() const
 
 FReply STitanVirtualJoystick::OnTouchStarted(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
-
+if(Owner->bIsDisabled)
+{
+	Owner->OnClickedWhenDisabled.Broadcast();
+	return FReply::Unhandled();
+}
 	
 	
 bIsPressed=true;
@@ -206,6 +217,11 @@ bIsPressed=true;
 
 FReply STitanVirtualJoystick::OnTouchMoved(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
+	if(Owner->bIsDisabled&&!bIsPressed)
+	{
+		
+		return FReply::Unhandled();
+	}
 	FVector2D LocalCoord = MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition() );
 
 	
@@ -230,8 +246,7 @@ FReply STitanVirtualJoystick::OnTouchMoved(const FGeometry& MyGeometry, const FP
 
 FReply STitanVirtualJoystick::OnTouchEnded(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
-
-	bIsPressed=false;
+	
 	
 	
 		// is this control the one captured to this pointer?

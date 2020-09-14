@@ -5,6 +5,10 @@
 #include "Slate/DeferredCleanupSlateBrush.h"
 #define LOCTEXT_NAMESPACE "UMG"
 
+
+void UTitanPannerMinimal::SetImage1(UTexture2D* New)
+{ MyPanner->Image1 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
+}
 UTitanPannerMinimal::UTitanPannerMinimal(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
 {
     InputScale=FVector2D(1,1);
@@ -36,7 +40,7 @@ TSharedRef<SWidget> UTitanPannerMinimal::RebuildWidget()
 
     MyPanner= SNew(STitanPannerMinimal);
     MyPanner->Owner=this;
-    MyPanner->Image1 = BackGround ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(BackGround)) : TSharedPtr<ISlateBrushSource>();
+   SetImage1(BackGround);
     return MyPanner.ToSharedRef();
 }
 const FText UTitanPannerMinimal::GetPaletteCategory()

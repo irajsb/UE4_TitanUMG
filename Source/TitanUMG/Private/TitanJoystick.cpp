@@ -5,7 +5,7 @@
 #define LOCTEXT_NAMESPACE "UMG"
 UTitanJoystick::UTitanJoystick(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
 {
-    ActiveColor = FLinearColor(1,1,1,1);
+    ActiveColor = TextColor=FLinearColor(1,1,1,1);
     DeActiveColor = FLinearColor(1,1,1,0.2);
     TimeUntilDeactive = 0.5f;
     TimeUntilReset = 2.0f;
@@ -16,6 +16,7 @@ VisualSize=FVector2D(1000,1000);
     Center=FVector2D(0.5,0.5);
     InteractionSize=InputScale=FVector2D(1,1);
     Thumb=  Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, TEXT("/Engine/MobileResources/HUD/VirtualJoystick_Thumb.VirtualJoystick_Thumb")));
+    TextToShow=FString("NULL");
     BackGround=  Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, TEXT("/Engine/MobileResources/HUD/VirtualJoystick_Background.VirtualJoystick_Background")));
 }
 
@@ -40,14 +41,27 @@ void UTitanJoystick::SetDeActiveColor(FLinearColor InDeActiveColor)
 {DeActiveColor=InDeActiveColor;
 }
 
+void UTitanJoystick::SetTextColor(FLinearColor InTextColor)
+{TextColor=InTextColor;
+}
+
+void UTitanJoystick::SetImage1(UTexture2D* New)
+{
+    Image1 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
+}
+void UTitanJoystick::SetImage2(UTexture2D* New)
+{
+    Image2 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
+}
+
 TSharedRef<SWidget> UTitanJoystick::RebuildWidget()
 {
 
  
  
  
-    Image1 = Thumb ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(Thumb)) : TSharedPtr<ISlateBrushSource>();
-    Image2 = BackGround ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(BackGround)) : TSharedPtr<ISlateBrushSource>();
+    SetImage1(Thumb);
+    SetImage2(BackGround);
 
     if (InputScale.SizeSquared() > FMath::Square(DELTA))
     {

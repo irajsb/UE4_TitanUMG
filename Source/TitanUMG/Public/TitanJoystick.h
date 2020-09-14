@@ -15,6 +15,7 @@
  Wrapper for default UE4 Joysticks !
  
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClickedWhenDisabledPanner);
 UCLASS()
 class TITANUMG_API UTitanJoystick : public UWidget
 {
@@ -52,6 +53,7 @@ class TITANUMG_API UTitanJoystick : public UWidget
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly ,Category="Control", meta=(ToolTip="Color  of all controls while no controls are active"))
 	FLinearColor DeActiveColor;
+	
 
 	UPROPERTY(EditAnywhere, Category="Control", meta=(ToolTip="How long after user interaction will all controls fade out to Inactive Opacity"))
 	float TimeUntilDeactive;
@@ -67,12 +69,36 @@ class TITANUMG_API UTitanJoystick : public UWidget
 
 	UPROPERTY(EditAnywhere, Category = "Control", meta = (ToolTip = "Delay at startup before virtual joystick is drawn"))
 	float StartupDelay;
+
+	/*Slider does not work as  expected just find effect you like and use it (Total 7 effects)*/
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Control")
+	uint8 BackGroundDrawEffect;
+	/*Slider does not work as  expected just find effect you like and use it (Total 7 effects)*/
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Control")
+	uint8 ThumbDrawEffect;
+	/*Slider does not work as  expected just find effect you like and use it (Total 7 effects)*/
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Text")
+	uint8 TextDrawEffect;
+	UPROPERTY(EditAnywhere,Category="Text")
+	FSlateFontInfo FontInfo;
+	UPROPERTY(EditAnywhere,Category="Text")
+	FVector2D FontCenterCorrection;
+	//Set to NULL to disable 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Text")
+	FString TextToShow;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly ,Category="Text", meta=(ToolTip="Color  of Text"))
+	FLinearColor TextColor;
+	//set to disable manually Will fire an event if player tries to activate it Warning:Do not disable when joystick is touched 
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsDisabled;
 	/** The brush to use to draw the background for joysticks, or unclicked for buttons */
 	TSharedPtr< ISlateBrushSource > Image1;
 
 	/** The brush to use to draw the thumb for joysticks, or clicked for buttons */
 	TSharedPtr< ISlateBrushSource > Image2;
-	
+	/** Called when the button is clicked When Disabled */
+	UPROPERTY(BlueprintAssignable, Category="Joystick|Event")
+	FOnClickedWhenDisabledPanner OnClickedWhenDisabled;
 	
 	//Needed for anim
 	UFUNCTION(BlueprintCallable)
@@ -83,7 +109,13 @@ class TITANUMG_API UTitanJoystick : public UWidget
     void SetActiveColor(FLinearColor InActiveColor);
 	UFUNCTION(BlueprintCallable)
     void SetDeActiveColor(FLinearColor InDeActiveColor);
-
+	UFUNCTION(BlueprintCallable)
+	void SetTextColor(FLinearColor InTextColor);
+	UFUNCTION(BlueprintCallable)
+	void SetImage1(UTexture2D * New);
+	UFUNCTION(BlueprintCallable)
+    void SetImage2(UTexture2D * New);
+	
 	virtual TSharedRef<SWidget> RebuildWidget()override;
 	const FText GetPaletteCategory();
 	TSharedPtr<STitanVirtualJoystick> MyJoystick;

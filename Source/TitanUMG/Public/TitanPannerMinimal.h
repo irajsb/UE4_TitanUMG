@@ -51,5 +51,6 @@ class TITANUMG_API UTitanPannerMinimal : public UWidget
     void SetDeActiveColor(FLinearColor InDeActiveColor);
 	UFUNCTION(BlueprintCallable)
     void SetActiveColor(FLinearColor InActiveColor);
-	
+	UFUNCTION(BlueprintCallable)
+    void SetImage1(UTexture2D * New);
 };

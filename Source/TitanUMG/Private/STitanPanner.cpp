@@ -66,7 +66,11 @@ void STitanPanner::Construct(const FArguments& InArgs)
 
 FReply STitanPanner::OnTouchStarted(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
-	
+
+	if(Owner->bIsDisabled)
+	{Owner->OnClickedWhenDisabled.Broadcast();
+		return  FReply::Unhandled();
+	}
 	
 	NumofTouches++;
 	if(NumofTouches==1)
@@ -92,6 +96,10 @@ FReply STitanPanner::OnTouchStarted(const FGeometry& MyGeometry, const FPointerE
 
 FReply STitanPanner::OnTouchMoved(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
+	if(Owner->bIsDisabled)
+	{//Owner->OnClickedWhenDisabled.Broadcast();
+		return  FReply::Unhandled();
+	}
 const FVector2D TouchLocation=	MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition());
 
 	
@@ -248,12 +256,19 @@ int32 STitanPanner::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeo
             Owner->VisualCenter - FVector2D(CorrectedVisualSize.X * 0.5f, CorrectedVisualSize.Y * 0.5f),
             CorrectedVisualSize),
             Image1->GetSlateBrush(),
-            ESlateDrawEffect::None,NumofTouches>0?Owner->ActiveColor:Owner->DeActiveColor
+          static_cast<ESlateDrawEffect>(Owner->BackGroundDrawEffect),NumofTouches>0?Owner->ActiveColor:Owner->DeActiveColor
             
             );
+		
 	}
 
-
+	if(Owner->TextToShow!=FString("NULL"))
+	{
+		FSlateDrawElement::MakeText(OutDrawElements,
+        RetLayerId++,AllottedGeometry.ToPaintGeometry(
+            Owner->VisualCenter -Owner->FontInfo.Size* FVector2D(CorrectedVisualSize.X , CorrectedVisualSize.Y )*Owner->FontCenterCorrection,
+            CorrectedVisualSize),Owner->TextToShow,Owner->FontInfo,static_cast<ESlateDrawEffect>(Owner->TextDrawEffect),Owner->TextColor);
+	}
 	
 	return RetLayerId;
 }

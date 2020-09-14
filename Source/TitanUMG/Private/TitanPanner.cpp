@@ -8,11 +8,13 @@
 UTitanPanner::UTitanPanner(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
 {
 InputScale=FVector2D(1,1);
- ActiveColor=FLinearColor::White;
+ TextColor= ActiveColor=FLinearColor::White;
  VisualCenter=FVector2D(0.5,0.5);
  VisualSize=FVector2D(1000,1000);
  ActiveColor=FLinearColor::White;
  DeActiveColor=FLinearColor(1,1,1,0.5);
+ TextToShow=FString("NULL");
+ 
 }
 
 
@@ -25,11 +27,19 @@ void UTitanPanner::SimulateTouch(FVector2D in)
  MyPanner->SimulateTouch(in);
 }
 
+void UTitanPanner::SetTextColor(FLinearColor InTextColor)
+{TextColor=InTextColor;
+}
+
+void UTitanPanner::SetImage1(UTexture2D* New)
+{ MyPanner->Image1 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
+}
+
 TSharedRef<SWidget> UTitanPanner::RebuildWidget()
 {
 
  
- 
+
  
 
  if (InputScale.SizeSquared() > FMath::Square(DELTA))
@@ -39,7 +49,7 @@ TSharedRef<SWidget> UTitanPanner::RebuildWidget()
 
 MyPanner= SNew(STitanPanner);
 MyPanner->Owner=this;
- MyPanner->Image1 = BackGround ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(BackGround)) : TSharedPtr<ISlateBrushSource>();
+ SetImage1(BackGround);
  return MyPanner.ToSharedRef();
 }
 const FText UTitanPanner::GetPaletteCategory()
