@@ -7,7 +7,7 @@ Includes:
 - Pinch Zoom And Rotate 
 - Wrapped Around Unreal Default Joystick
 
-[![Video](https://yt-embed.herokuapp.com/embed?v=GQbN8Res764)
+[![Video](https://yt-embed.herokuapp.com/embed?v=GQbN8Res764)](https://youtu.be/GQbN8Res764)
 
 ---
 
