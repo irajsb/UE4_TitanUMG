@@ -21,34 +21,8 @@ VisualSize=FVector2D(1000,1000);
 }
 
 
-void UTitanJoystick::SetVisualSize(FVector2D InVisualSize)
-{VisualSize=InVisualSize;
-    MyJoystick->bHasBeenPositioned=false;
-    
-}
 
-void UTitanJoystick::SetThumbSize(FVector2D InThumbSize)
-{
-    ThumbSize=InThumbSize;
-    MyJoystick->bHasBeenPositioned=false;
-}
 
-void UTitanJoystick::SetActiveColor(FLinearColor InActiveColor)
-{ActiveColor=InActiveColor;
-}
-
-void UTitanJoystick::SetDeActiveColor(FLinearColor InDeActiveColor)
-{DeActiveColor=InDeActiveColor;
-}
-
-void UTitanJoystick::SetTextColor(FLinearColor InTextColor)
-{TextColor=InTextColor;
-}
-
-void UTitanJoystick::SetImage1(UTexture2D* New)
-{
-    Image1 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
-}
 void UTitanJoystick::SetImage2(UTexture2D* New)
 {
     Image2 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
@@ -78,8 +52,5 @@ TSharedRef<SWidget> UTitanJoystick::RebuildWidget()
     return MyJoystick.ToSharedRef();
 }
 
-const FText UTitanJoystick::GetPaletteCategory()
-{
-    return LOCTEXT("Titan", "Titan");
-}
+
 #undef LOCTEXT_NAMESPACE

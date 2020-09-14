@@ -194,7 +194,7 @@ int32 STitanPannerMinimal::OnPaint(const FPaintArgs& Args, const FGeometry& Allo
 {
 
 	int RetLayerId=LayerId;
-	if (Image1.IsValid())
+	if (Owner->Image1.IsValid())
 	{
 		FSlateDrawElement::MakeBox(
             OutDrawElements,
@@ -202,7 +202,7 @@ int32 STitanPannerMinimal::OnPaint(const FPaintArgs& Args, const FGeometry& Allo
             AllottedGeometry.ToPaintGeometry(
             Owner->VisualCenter - FVector2D(CorrectedVisualSize.X * 0.5f, CorrectedVisualSize.Y * 0.5f),
             CorrectedVisualSize),
-            Image1->GetSlateBrush(),
+            Owner->Image1->GetSlateBrush(),
             ESlateDrawEffect::None,NumofTouches>0?Owner->ActiveColor:Owner->DeActiveColor
             
             );

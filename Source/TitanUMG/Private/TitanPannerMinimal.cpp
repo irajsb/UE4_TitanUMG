@@ -7,7 +7,7 @@
 
 
 void UTitanPannerMinimal::SetImage1(UTexture2D* New)
-{ MyPanner->Image1 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
+{ Image1 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
 }
 UTitanPannerMinimal::UTitanPannerMinimal(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
 {

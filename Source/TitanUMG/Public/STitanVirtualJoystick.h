@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InputCoreTypes.h"
+#include "STitanPanner.h"
 #include "Input/Reply.h"
 #include "Brushes/SlateDynamicImageBrush.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
@@ -15,7 +16,7 @@ class UTitanJoystick;
 /**
  * A virtual joystsick
  */
-class TITANUMG_API STitanVirtualJoystick : public SLeafWidget
+class TITANUMG_API STitanVirtualJoystick : public STitanPanner
 {
 
 public:
@@ -77,11 +78,20 @@ protected:
 	 */
 	FORCEINLINE FLinearColor GetBaseColor();
 	void Reset();
+	enum EVirtualJoystickState
+	{
+		State_Active,
+        State_CountingDownToInactive,
+        State_CountingDownToReset,
+        State_Inactive,
+        State_WaitForStart,
+        State_CountingDownToStart,
+    };
+
 
 public:
 	/** Global settings from the UTouchInterface */
-	/** The position of the thumb, in relation to the VisualCenter */
-	FVector2D ThumbPosition;
+
 
 	/** For recentered joysticks, this is the re-center location */
 	FVector2D VisualCenter;
@@ -89,8 +99,7 @@ public:
 	/** The corrected actual center of the control */
 	FVector2D CorrectedCenter;
 
-	/** The corrected size of a joystick that can be re-centered within InteractionSize area */
-	FVector2D CorrectedVisualSize;
+
 
 	/** The corrected size of the thumb that can be re-centered within InteractionSize area */
 	FVector2D CorrectedThumbSize;
@@ -102,7 +111,7 @@ public:
 	FVector2D CorrectedInputScale;
 
 	/** Which pointer index is interacting with this control right now, or -1 if not interacting */
-	int32 CapturedPointerIndex;
+	int8 CapturedPointerIndex;
 
 	/** Time to activate joystick **/
 	float ElapsedTime;
@@ -110,8 +119,7 @@ public:
 	/** Visual center to be updated */
 	FVector2D NextCenter;
 
-	/** Whether or not to send one last "release" event next tick */
-	bool bSendOneMoreEvent;
+
 
 	/** Whether or not we need position the control against the geometry */
 	bool bHasBeenPositioned;
@@ -119,15 +127,6 @@ public:
 	/** Whether or not to update center position */
 	bool bNeedUpdatedCenter;
 
-	enum EVirtualJoystickState
-	{
-		State_Active,
-		State_CountingDownToInactive,
-		State_CountingDownToReset,
-		State_Inactive,
-		State_WaitForStart,
-		State_CountingDownToStart,
-	};
 
 	/** The current state of all controls */
 	EVirtualJoystickState State;
@@ -135,11 +134,7 @@ public:
 	/** True if the joystick should be visible */
 	uint32 bVisible:1;
 
-	/** If true, this zone will have it's "center" set when you touch it, otherwise the center will be set to the center of the zone */
-	uint32 bCenterOnEvent:1;
-
 	
-	uint32 bIsPressed:1;
 	
 	
 	/** Target opacity */

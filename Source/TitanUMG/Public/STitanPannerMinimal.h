@@ -34,23 +34,23 @@ class TITANUMG_API STitanPannerMinimal : public SLeafWidget
     virtual void Tick( const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime ) override;
 
 
-    /** The brush to use to draw the background for joysticks, or unclicked for buttons */
-    TSharedPtr< ISlateBrushSource > Image1;
+  
 
     uint8 NumofTouches;
-	
     bool HandleEvent;
-
-    virtual bool SupportsKeyboardFocus() const override;
     FVector2D Result;
-
-    //X=-1000 is considered null
     FVector2D Index1Location;
+    FVector2D CorrectedVisualSize;
+    
+    virtual bool SupportsKeyboardFocus() const override;
+   
+    //X=-1000 is considered null
+    
 
 
 
     /** The corrected size of a joystick that can be re-centered within InteractionSize area */
-    FVector2D CorrectedVisualSize;
+ 
     UTitanPannerMinimal * Owner;
     public:
 

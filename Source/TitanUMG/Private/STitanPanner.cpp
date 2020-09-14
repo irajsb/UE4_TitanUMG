@@ -49,14 +49,6 @@ bool STitanPanner::SupportsKeyboardFocus() const
 	return false;
 }
 
-void STitanPanner::SimulateTouch(FVector2D in)
-{
-	NumofTouches++;
-
-Index1Location=in;
-
-	
-}
 
 
 void STitanPanner::Construct(const FArguments& InArgs)
@@ -247,7 +239,7 @@ int32 STitanPanner::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeo
 {
 
 	int RetLayerId=LayerId;
-	if (Image1.IsValid())
+	if (Owner->Image1.IsValid())
 	{
 		FSlateDrawElement::MakeBox(
             OutDrawElements,
@@ -255,7 +247,7 @@ int32 STitanPanner::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeo
             AllottedGeometry.ToPaintGeometry(
             Owner->VisualCenter - FVector2D(CorrectedVisualSize.X * 0.5f, CorrectedVisualSize.Y * 0.5f),
             CorrectedVisualSize),
-            Image1->GetSlateBrush(),
+            Owner->Image1->GetSlateBrush(),
           static_cast<ESlateDrawEffect>(Owner->BackGroundDrawEffect),NumofTouches>0?Owner->ActiveColor:Owner->DeActiveColor
             
             );

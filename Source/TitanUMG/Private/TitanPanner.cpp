@@ -18,9 +18,7 @@ InputScale=FVector2D(1,1);
 }
 
 
-void UTitanPanner::SetActiveColor(FLinearColor InActiveColor)
-{ActiveColor=InActiveColor;
-}
+
 
 void UTitanPanner::SimulateTouch(FVector2D in)
 {
@@ -31,9 +29,6 @@ void UTitanPanner::SetTextColor(FLinearColor InTextColor)
 {TextColor=InTextColor;
 }
 
-void UTitanPanner::SetImage1(UTexture2D* New)
-{ MyPanner->Image1 = New  ? StaticCastSharedRef<ISlateBrushSource>(FDeferredCleanupSlateBrush::CreateBrush(New)) : TSharedPtr<ISlateBrushSource>();
-}
 
 TSharedRef<SWidget> UTitanPanner::RebuildWidget()
 {
@@ -52,16 +47,9 @@ MyPanner->Owner=this;
  SetImage1(BackGround);
  return MyPanner.ToSharedRef();
 }
-const FText UTitanPanner::GetPaletteCategory()
-{
- return LOCTEXT("Titan", "Titan");
-}
 
-void UTitanPanner::SetVisualSize(FVector2D InVisualSize)
-{VisualSize=InVisualSize;
-}
 
-void UTitanPanner::SetDeActiveColor(FLinearColor InDeActiveColor)
-{DeActiveColor=InDeActiveColor;
-}
+
+
+
 #undef LOCTEXT_NAMESPACE

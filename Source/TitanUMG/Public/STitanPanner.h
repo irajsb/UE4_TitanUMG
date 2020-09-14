@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InputCoreTypes.h"
+#include "STitanPannerMinimal.h"
 #include "Input/Reply.h"
 #include "Brushes/SlateDynamicImageBrush.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
@@ -15,7 +16,7 @@ class UTitanPanner;
 /**
  * A virtual joystsick
  */
-class TITANUMG_API STitanPanner : public SLeafWidget
+class TITANUMG_API STitanPanner : public STitanPannerMinimal
 {
 
 public:
@@ -36,30 +37,28 @@ public:
 	virtual void Tick( const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime ) override;
 
 
-	/** The brush to use to draw the background for joysticks, or unclicked for buttons */
-	TSharedPtr< ISlateBrushSource > Image1;
 
-uint8 NumofTouches;
-	
-bool HandleEvent;
 
-virtual bool SupportsKeyboardFocus() const override;
-FVector2D Result;
 
 	//X=-1000 is considered null
-FVector2D Index1Location;
-FVector2D Index2Location;
-float LastPinchSize;
-float LastRotation;
-float  PinchResult;
+	
+	FVector2D Index2Location;
+	float LastPinchSize;
+	float LastRotation;
+	float  PinchResult;
 	float LastAngle;
 	float AngleResult;
 
+	UTitanPanner * Owner;
+virtual bool SupportsKeyboardFocus() const override;
+
+
+
+
 
 	/** The corrected size of a joystick that can be re-centered within InteractionSize area */
-	FVector2D CorrectedVisualSize;
-UTitanPanner * Owner;
+
 public:
 
-	void SimulateTouch(FVector2D in);
+	
 };

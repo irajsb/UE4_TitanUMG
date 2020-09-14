@@ -126,7 +126,7 @@ int32 STitanVirtualJoystick::OnPaint( const FPaintArgs& Args, const FGeometry& A
 					OutDrawElements,
 					RetLayerId++,
 					AllottedGeometry.ToPaintGeometry(
-					VisualCenter + ThumbPosition - FVector2D(CorrectedThumbSize.X * 0.5f, CorrectedThumbSize.Y * 0.5f),
+					VisualCenter + Index1Location - FVector2D(CorrectedThumbSize.X * 0.5f, CorrectedThumbSize.Y * 0.5f),
 					CorrectedThumbSize),
 					Owner->Image1->GetSlateBrush(),
 					static_cast<ESlateDrawEffect>(Owner->ThumbDrawEffect),
@@ -158,6 +158,7 @@ bool STitanVirtualJoystick::SupportsKeyboardFocus() const
 
 FReply STitanVirtualJoystick::OnTouchStarted(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
+	NumofTouches++;
 if(Owner->bIsDisabled)
 {
 	Owner->OnClickedWhenDisabled.Broadcast();
@@ -165,7 +166,7 @@ if(Owner->bIsDisabled)
 }
 	
 	
-bIsPressed=true;
+
 
 	FVector2D LocalCoord = MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition() );
 
@@ -217,7 +218,7 @@ bIsPressed=true;
 
 FReply STitanVirtualJoystick::OnTouchMoved(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
-	if(Owner->bIsDisabled&&!bIsPressed)
+	if(Owner->bIsDisabled&&NumofTouches==0)
 	{
 		
 		return FReply::Unhandled();
@@ -246,18 +247,18 @@ FReply STitanVirtualJoystick::OnTouchMoved(const FGeometry& MyGeometry, const FP
 
 FReply STitanVirtualJoystick::OnTouchEnded(const FGeometry& MyGeometry, const FPointerEvent& Event)
 {
-	
+	NumofTouches--;
 	
 	
 		// is this control the one captured to this pointer?
 		if ( CapturedPointerIndex == Event.GetPointerIndex() )
 		{
 			// release and center the joystick
-			ThumbPosition = FVector2D(0, 0);
+			Index1Location = FVector2D(0, 0);
 			CapturedPointerIndex = -1;
 
 			// send one more joystick update for the centering
-			bSendOneMoreEvent = true;
+			HandleEvent = true;
 
 			// Pass event as unhandled if time is too short
 			if ( bNeedUpdatedCenter )
@@ -283,7 +284,7 @@ bool STitanVirtualJoystick::HandleTouch(int32 ControlIndex, const FVector2D& Loc
 	// only do work if we aren't at the center
 	if (Offset == FVector2D(0, 0))
 	{
-		ThumbPosition = Offset;
+		Index1Location = Offset;
 	}
 	else
 	{
@@ -302,11 +303,11 @@ bool STitanVirtualJoystick::HandleTouch(int32 ControlIndex, const FVector2D& Loc
 		if (DistanceToTouchSqr > FMath::Square(DistanceToEdge))
 		{
 			
-			ThumbPosition = FVector2D(DistanceToEdge * CosAngle,  DistanceToEdge * SinAngle);
+			Index1Location = FVector2D(DistanceToEdge * CosAngle,  DistanceToEdge * SinAngle);
 		}
 		else
 		{
-			ThumbPosition = Offset;
+			Index1Location = Offset;
 		}
 	
 	}
@@ -373,12 +374,13 @@ void STitanVirtualJoystick::Tick( const FGeometry& AllottedGeometry, const doubl
 			bHasBeenPositioned = true;
 		}
 
-		if (CapturedPointerIndex >= 0 || bSendOneMoreEvent)
+		if (CapturedPointerIndex >= 0 || HandleEvent)
 		{
-			bSendOneMoreEvent = false;
+			//Handle event is for sending one more input
+			HandleEvent = false;
 
 			// Get the corrected thumb offset scale (now allows ellipse instead of assuming square)
-			FVector2D ThumbScaledOffset = FVector2D(ThumbPosition.X * 2.0f / CorrectedVisualSize.X, ThumbPosition.Y * 2.0f / CorrectedVisualSize.Y);
+			FVector2D ThumbScaledOffset = FVector2D(Index1Location.X * 2.0f / CorrectedVisualSize.X, Index1Location.Y * 2.0f / CorrectedVisualSize.Y);
 			float ThumbSquareSum = ThumbScaledOffset.X * ThumbScaledOffset.X + ThumbScaledOffset.Y * ThumbScaledOffset.Y;
 			float ThumbMagnitude = FMath::Sqrt(ThumbSquareSum);
 			FVector2D ThumbNormalized = FVector2D(0.f, 0.f);
@@ -406,7 +408,7 @@ void STitanVirtualJoystick::Tick( const FGeometry& AllottedGeometry, const doubl
 			FSlateApplication::Get().OnControllerAnalog(YAxis, 0, -NormalizedOffset.Y);
 			if(Owner->MainInputKey.IsValid())
 			{
-				if(bIsPressed)
+				if(NumofTouches!=0)
 				{
 					const FGamepadKeyNames::Type Press = Owner->PressInputKey.GetFName() ;
 					FSlateApplication::Get().OnControllerButtonPressed(Press,0,false);
