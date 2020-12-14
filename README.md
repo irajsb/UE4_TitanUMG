@@ -2,11 +2,21 @@
 
 Includes:
 
-- Joystick
-- Pan And Swipe 
-- Pinch Zoom And Rotate 
+- Square Progress Bar
+- Diamond Progress Bar
+- Radial Progrss Bar
+- Chat System (Networked)
+- Joystick (deprecated)
+- Pan And Swipe (deprecated)
+- Pinch Zoom And Rotate (deprecated)
 - Wrapped Around Unreal Default Joystick
 
+
+
+
+
+
+##UE4 4.26 deprecated Needs to be fixed (Usable but has memory leak Error)
 [![Video](https://yt-embed.herokuapp.com/embed?v=GQbN8Res764)](https://youtu.be/GQbN8Res764)
 
 ---
