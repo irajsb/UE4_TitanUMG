@@ -155,7 +155,7 @@ const FSlateBrush* STitanProgressBar::GetMarqueeImage() const
 }
 
 // Returns false if the clipping zone area is zero in which case we should skip drawing
-bool PushTransformedClip(FSlateWindowElementList& OutDrawElements, const FGeometry& AllottedGeometry, FVector2D InsetPadding, FVector2D ProgressOrigin, FSlateRect Progress)
+bool PushTransformedClipTitan(FSlateWindowElementList& OutDrawElements, const FGeometry& AllottedGeometry, FVector2D InsetPadding, FVector2D ProgressOrigin, FSlateRect Progress)
 {
 	const FSlateRenderTransform& Transform = AllottedGeometry.GetAccumulatedRenderTransform();
 
@@ -227,7 +227,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 		{
 			case ETitanProgressBarFillType::RightToLeft:
 			{
-					if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(1, 0), FSlateRect(LerpedClampedFraction, 0, 0, 1)))
+					if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(1, 0), FSlateRect(LerpedClampedFraction, 0, 0, 1)))
 					{
 						// Draw Fill
 						FSlateDrawElement::MakeBox(
@@ -245,7 +245,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 					}
 
 					//fill
-				if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(1, 0), FSlateRect(ClampedFraction, 0, 0, 1)))
+				if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(1, 0), FSlateRect(ClampedFraction, 0, 0, 1)))
 				{
 					// Draw Fill
 					FSlateDrawElement::MakeBox(
@@ -269,7 +269,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 				const float HalfLerpFrac=LerpedClampedFraction/2.0f;
 
 
-					if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0.5, 0.5), FSlateRect(HalfLerpFrac, HalfLerpFrac, HalfLerpFrac, HalfLerpFrac)))
+					if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0.5, 0.5), FSlateRect(HalfLerpFrac, HalfLerpFrac, HalfLerpFrac, HalfLerpFrac)))
 					{
 						// Draw Fill
 						FSlateDrawElement::MakeBox(
@@ -285,7 +285,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 
 						OutDrawElements.PopClip();
 					}
-				if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0.5, 0.5), FSlateRect(HalfFrac, HalfFrac, HalfFrac, HalfFrac)))
+				if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0.5, 0.5), FSlateRect(HalfFrac, HalfFrac, HalfFrac, HalfFrac)))
 				{
 					// Draw Fill
 					FSlateDrawElement::MakeBox(
@@ -306,7 +306,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 			case ETitanProgressBarFillType::TopToBottom:
 			{
 
-					if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, 1, LerpedClampedFraction)))
+					if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, 1, LerpedClampedFraction)))
 					{
 						// Draw Fill
 						FSlateDrawElement::MakeBox(
@@ -322,7 +322,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 
 						OutDrawElements.PopClip();
 					}
-				if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, 1, ClampedFraction)))
+				if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, 1, ClampedFraction)))
 				{
 					// Draw Fill
 					FSlateDrawElement::MakeBox(
@@ -344,7 +344,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 			{
 
 
-					if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 1), FSlateRect(0, LerpedClampedFraction, 1, 0)))
+					if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 1), FSlateRect(0, LerpedClampedFraction, 1, 0)))
 					{
 						FSlateRect ClippedAllotedGeometry = FSlateRect(AllottedGeometry.AbsolutePosition, AllottedGeometry.AbsolutePosition + AllottedGeometry.GetLocalSize() * AllottedGeometry.Scale);
 						ClippedAllotedGeometry.Top = ClippedAllotedGeometry.Bottom - ClippedAllotedGeometry.GetSize().Y * ClampedFraction;
@@ -363,7 +363,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 
 						OutDrawElements.PopClip();
 					}
-				if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 1), FSlateRect(0, ClampedFraction, 1, 0)))
+				if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 1), FSlateRect(0, ClampedFraction, 1, 0)))
 				{
 					FSlateRect ClippedAllotedGeometry = FSlateRect(AllottedGeometry.AbsolutePosition, AllottedGeometry.AbsolutePosition + AllottedGeometry.GetLocalSize() * AllottedGeometry.Scale);
 					ClippedAllotedGeometry.Top = ClippedAllotedGeometry.Bottom - ClippedAllotedGeometry.GetSize().Y * ClampedFraction;
@@ -388,7 +388,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 			default:
 			{
 
-					if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, LerpedClampedFraction, 1)))
+					if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, LerpedClampedFraction, 1)))
 					{
 						// Draw Fill
 						FSlateDrawElement::MakeBox(
@@ -404,7 +404,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 
 						OutDrawElements.PopClip();
 					}
-				if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, ClampedFraction, 1)))
+				if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, ClampedFraction, 1)))
 				{
 					// Draw Fill
 					FSlateDrawElement::MakeBox(
@@ -432,7 +432,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 		const float MarqueeAnimOffset = CurrentMarqueeImage->ImageSize.X * MarqueeOffset;
 		const float MarqueeImageSize = CurrentMarqueeImage->ImageSize.X;
 
-		if (PushTransformedClip(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, 1, 1)))
+		if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 0), FSlateRect(0, 0, 1, 1)))
 		{
 			FSlateDrawElement::MakeBox(
 				OutDrawElements,
