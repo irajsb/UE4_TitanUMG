@@ -128,6 +128,25 @@ FReply STitanPannerMinimal::OnTouchEnded(const FGeometry& MyGeometry, const FPoi
 	
 }
 
+FReply STitanPannerMinimal::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+{
+	return  OnTouchMoved(MyGeometry,MouseEvent);
+}
+
+FReply STitanPannerMinimal::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+{
+	if(MouseEvent.GetEffectingButton().IsValid()&&MouseEvent.GetEffectingButton()==FKey("LeftMouseButton"))
+	{
+	return 	OnTouchStarted(MyGeometry,MouseEvent);
+	}
+	return  FReply::Unhandled();
+}
+
+FReply STitanPannerMinimal::OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+{
+	return  OnTouchEnded(MyGeometry,MouseEvent);
+}
+
 void STitanPannerMinimal::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 	

@@ -31,6 +31,9 @@ class TITANUMG_API STitanPannerMinimal : public SLeafWidget
     virtual FReply OnTouchStarted(const FGeometry& MyGeometry, const FPointerEvent& Event) override;
     virtual FReply OnTouchMoved(const FGeometry& MyGeometry, const FPointerEvent& Event) override;
     virtual FReply OnTouchEnded(const FGeometry& MyGeometry, const FPointerEvent& Event) override;
+    virtual FReply OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+    virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+    virtual FReply OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
     virtual void Tick( const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime ) override;
 
 
