@@ -121,7 +121,7 @@ FReply STitanPannerMinimal::OnTouchEnded(const FGeometry& MyGeometry, const FPoi
 
 
 
-			
+	DoubleClicked=false;
 		
 	
 	return FReply::Handled().ReleaseMouseCapture();
@@ -130,21 +130,41 @@ FReply STitanPannerMinimal::OnTouchEnded(const FGeometry& MyGeometry, const FPoi
 
 FReply STitanPannerMinimal::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
-	return  OnTouchMoved(MyGeometry,MouseEvent);
+	OnTouchMoved(MyGeometry,MouseEvent);
+	return FReply::Unhandled(); 
 }
 
 FReply STitanPannerMinimal::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
+
 	if(MouseEvent.GetEffectingButton().IsValid()&&MouseEvent.GetEffectingButton()==FKey("LeftMouseButton"))
 	{
-	return 	OnTouchStarted(MyGeometry,MouseEvent);
+	return  	OnTouchStarted(MyGeometry,MouseEvent);
+	}
+	return  FReply::Unhandled();
+}
+
+FReply STitanPannerMinimal::OnMouseButtonDoubleClick(const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent)
+{
+
+	
+	if(InMouseEvent.GetEffectingButton().IsValid()&&InMouseEvent.GetEffectingButton()==FKey("LeftMouseButton"))
+	{
+		DoubleClicked=true;
+		return 	OnTouchStarted(InMyGeometry,InMouseEvent);
 	}
 	return  FReply::Unhandled();
 }
 
 FReply STitanPannerMinimal::OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
-	return  OnTouchEnded(MyGeometry,MouseEvent);
+	if(MouseEvent.GetEffectingButton().IsValid()&&MouseEvent.GetEffectingButton()==FKey("LeftMouseButton"))
+	{
+		
+		return  OnTouchEnded(MyGeometry,MouseEvent);
+	}
+	
+	return  FReply::Unhandled();
 }
 
 void STitanPannerMinimal::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
@@ -155,14 +175,30 @@ if(Owner->PressInputKey.IsValid())
 {
 	if(NumofTouches!=0)
 	{
-		const FGamepadKeyNames::Type Press = Owner->PressInputKey.GetFName() ;
-		FSlateApplication::Get().OnControllerButtonPressed(Press,0,false);
+		const FGamepadKeyNames::Type Press =DoubleClicked?Owner->DoubleClickInputKey.GetFName(): Owner->PressInputKey.GetFName() ;
+		if(DoubleClicked?!CurrentDoubleClickPressed:!CurrentClickPressed)
+		{
+			FSlateApplication::Get().OnControllerButtonPressed(Press,0,false);
+			CurrentClickPressed=!DoubleClicked;
+			CurrentDoubleClickPressed=DoubleClicked;
+		}
 		
 		
 	}else
 	{
+		
 		const FGamepadKeyNames::Type Press = Owner->PressInputKey.GetFName() ;
-		FSlateApplication::Get().OnControllerButtonReleased(Press,0,false);
+		if(CurrentClickPressed)
+		{
+			CurrentClickPressed=false;
+			FSlateApplication::Get().OnControllerButtonReleased(Press,0,false);
+		}
+		if(Owner->DoubleClickInputKey.IsValid()&&CurrentDoubleClickPressed)
+		{
+			CurrentDoubleClickPressed=false;
+			const FGamepadKeyNames::Type DoubleClick = Owner->DoubleClickInputKey.GetFName() ;
+			FSlateApplication::Get().OnControllerButtonReleased(DoubleClick,0,false);
+		}
 	}
 }
 	const FGamepadKeyNames::Type XAxis = (Owner->MainInputKey.IsValid() ? Owner->MainInputKey.GetFName() : ( FGamepadKeyNames::RightAnalogX  ));

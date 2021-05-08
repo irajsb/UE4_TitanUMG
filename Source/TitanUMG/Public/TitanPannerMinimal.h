@@ -36,6 +36,8 @@ class TITANUMG_API UTitanPannerMinimal : public UWidget
 	FKey AltInputKey;
 	UPROPERTY(EditAnywhere, Category="Control", meta=(ToolTip="The alternate input to send from this control (for sticks, this is the vertical axis)"))
 	FKey PressInputKey;
+	UPROPERTY(EditAnywhere, Category="Control", meta=(ToolTip="The alternate input to send from this control (for sticks, this is the vertical axis)"))
+	FKey DoubleClickInputKey;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category="Control", meta=(ToolTip="Color  of all controls while any control is active"))
 	FLinearColor ActiveColor;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly ,Category="Control", meta=(ToolTip="Color  of all controls while no controls are active"))
