@@ -23,7 +23,7 @@ public class TitanUMG : ModuleRules
 			
 		
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "Slate", "SlateCore","ApplicationCore","RenderCore",
-			"RHI", });
+			"RHI","Projects" });
 
 			
 		

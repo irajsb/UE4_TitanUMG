@@ -51,7 +51,7 @@ class TITANUMG_API UTitanPannerMinimal : public UWidget
 	UPROPERTY(BlueprintAssignable, Category="Joystick|Event")
 	FOnClickedWhenDisabled OnClickedWhenDisabled;
 	
-	virtual TSharedRef<SWidget> RebuildWidget()override;
+	virtual TSharedRef<SWidget> RebuildWidget();
 	const FText GetPaletteCategory();
 	TSharedPtr<STitanPannerMinimal> MyPanner;
 	UFUNCTION(BlueprintCallable)
