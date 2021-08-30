@@ -406,7 +406,7 @@ void STitanVirtualJoystick::Tick( const FGeometry& AllottedGeometry, const doubl
 			FSlateApplication::Get().SetAllUserFocusToGameViewport();
 			FSlateApplication::Get().OnControllerAnalog(XAxis, 0, NormalizedOffset.X);
 			FSlateApplication::Get().OnControllerAnalog(YAxis, 0, -NormalizedOffset.Y);
-			if(Owner->MainInputKey.IsValid())
+			if(Owner->PressInputKey.IsValid())
 			{
 				if(NumofTouches!=0)
 				{
