@@ -346,7 +346,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 
 					if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 1), FSlateRect(0, LerpedClampedFraction, 1, 0)))
 					{
-						FSlateRect ClippedAllotedGeometry = FSlateRect(AllottedGeometry.AbsolutePosition, AllottedGeometry.AbsolutePosition + AllottedGeometry.GetLocalSize() * AllottedGeometry.Scale);
+						FSlateRect ClippedAllotedGeometry = FSlateRect(FVector2D(AllottedGeometry.AbsolutePosition.X,AllottedGeometry.AbsolutePosition.Y),FVector2D( AllottedGeometry.AbsolutePosition.X,AllottedGeometry.AbsolutePosition.Y) +  AllottedGeometry.GetLocalSize() * AllottedGeometry.Scale);
 						ClippedAllotedGeometry.Top = ClippedAllotedGeometry.Bottom - ClippedAllotedGeometry.GetSize().Y * ClampedFraction;
 
 						// Draw Fill
@@ -365,7 +365,7 @@ int32 STitanProgressBar::OnPaint( const FPaintArgs& Args, const FGeometry& Allot
 					}
 				if (PushTransformedClipTitan(OutDrawElements, AllottedGeometry, BorderPaddingRef, FVector2D(0, 1), FSlateRect(0, ClampedFraction, 1, 0)))
 				{
-					FSlateRect ClippedAllotedGeometry = FSlateRect(AllottedGeometry.AbsolutePosition, AllottedGeometry.AbsolutePosition + AllottedGeometry.GetLocalSize() * AllottedGeometry.Scale);
+						FSlateRect ClippedAllotedGeometry = FSlateRect(FVector2D(AllottedGeometry.AbsolutePosition.X,AllottedGeometry.AbsolutePosition.Y),FVector2D( AllottedGeometry.AbsolutePosition.X,AllottedGeometry.AbsolutePosition.Y) +  AllottedGeometry.GetLocalSize() * AllottedGeometry.Scale);
 					ClippedAllotedGeometry.Top = ClippedAllotedGeometry.Bottom - ClippedAllotedGeometry.GetSize().Y * ClampedFraction;
 
 					// Draw Fill
