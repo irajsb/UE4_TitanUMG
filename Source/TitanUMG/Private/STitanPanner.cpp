@@ -168,13 +168,13 @@ if(Owner->PressInputKey.IsValid())
 	if(NumofTouches!=0)
 	{
 		const FGamepadKeyNames::Type Press = Owner->PressInputKey.GetFName() ;
-		FSlateApplication::Get().OnControllerButtonPressed(Press,0,false);
+		HandleControllerButtonPressed(Press,false);
 		
 		
 	}else
 	{
 		const FGamepadKeyNames::Type Press = Owner->PressInputKey.GetFName() ;
-		FSlateApplication::Get().OnControllerButtonReleased(Press,0,false);
+		HandleControllerButtonReleased(Press,false);
 	}
 }
 	const FGamepadKeyNames::Type XAxis = (Owner->MainInputKey.IsValid() ? Owner->MainInputKey.GetFName() : ( FGamepadKeyNames::RightAnalogX  ));
@@ -186,23 +186,23 @@ if(HandleEvent)
 	{
 		
 			
-		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, Result.X*Owner->InputScale.X);
-		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, Result.Y*Owner->InputScale.Y);
+		HandleControllerAnalog(XAxis, Result.X*Owner->InputScale.X);
+		HandleControllerAnalog(YAxis, Result.Y*Owner->InputScale.Y);
 		FSlateApplication::Get().SetAllUserFocusToGameViewport();
 		
 		HandleEvent=false;
 	}else
 	{
 		FSlateApplication::Get().SetAllUserFocusToGameViewport();
-		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, 0);
-		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, 0);
+		HandleControllerAnalog(XAxis, 0.f);
+		HandleControllerAnalog(YAxis, 0.f);
 	}
 }else{
 		
 
 		FSlateApplication::Get().SetAllUserFocusToGameViewport();
-		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, 0);
-		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, 0);
+		HandleControllerAnalog(XAxis, 0.f);
+		HandleControllerAnalog(YAxis, 0.f);
 	}
 	float ScaleFactor = TGetScaleFactor(AllottedGeometry);
 	Owner->VisualCenter = FVector2D(TResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().X, ScaleFactor), TResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().Y, ScaleFactor));
@@ -213,13 +213,13 @@ if(HandleEvent)
 			{	if(Owner->PinchInputKey.IsValid())
 			{
 				const FGamepadKeyNames::Type Pinch = Owner->PinchInputKey.GetFName() ;
-				FSlateApplication::Get().OnControllerAnalog(Pinch, 0, PinchResult);
+				HandleControllerAnalog(Pinch,  PinchResult);
 				PinchResult=0;
 			}
 				if(Owner->PinchRotateInputKey.IsValid())
 				{
 					const FGamepadKeyNames::Type PinchRotate = Owner->PinchInputKey.GetFName() ;
-					FSlateApplication::Get().OnControllerAnalog(PinchRotate, 0, AngleResult);
+					HandleControllerAnalog(PinchRotate,  AngleResult);
 					AngleResult=0;
 				}
 				

@@ -404,18 +404,18 @@ void STitanVirtualJoystick::Tick( const FGeometry& AllottedGeometry, const doubl
 			const FGamepadKeyNames::Type YAxis = (Owner->AltInputKey.IsValid() ? Owner->AltInputKey.GetFName() : (FGamepadKeyNames::LeftAnalogY ));
 
 			FSlateApplication::Get().SetAllUserFocusToGameViewport();
-			FSlateApplication::Get().OnControllerAnalog(XAxis, 0, NormalizedOffset.X);
-			FSlateApplication::Get().OnControllerAnalog(YAxis, 0, -NormalizedOffset.Y);
+			HandleControllerAnalog(XAxis, NormalizedOffset.X);
+			HandleControllerAnalog(YAxis, -NormalizedOffset.Y);
 			if(Owner->PressInputKey.IsValid())
 			{
 				if(NumofTouches!=0)
 				{
 					const FGamepadKeyNames::Type Press = Owner->PressInputKey.GetFName() ;
-					FSlateApplication::Get().OnControllerButtonPressed(Press,0,false);
+					HandleControllerButtonPressed(Press,false);
 				}else
 				{
 					const FGamepadKeyNames::Type Press = Owner->PressInputKey.GetFName() ;
-					FSlateApplication::Get().OnControllerButtonReleased(Press,0,false);
+					HandleControllerButtonReleased(Press,false);
 				}
 				
 

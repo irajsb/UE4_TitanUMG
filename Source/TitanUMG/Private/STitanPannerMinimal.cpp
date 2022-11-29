@@ -59,6 +59,7 @@ Index1Location=in;
 }
 
 
+
 void STitanPannerMinimal::Construct(const FArguments& InArgs)
 {
 
@@ -178,7 +179,7 @@ if(Owner->PressInputKey.IsValid())
 		const FGamepadKeyNames::Type Press =DoubleClicked?Owner->DoubleClickInputKey.GetFName(): Owner->PressInputKey.GetFName() ;
 		if(DoubleClicked?!CurrentDoubleClickPressed:!CurrentClickPressed)
 		{
-			FSlateApplication::Get().OnControllerButtonPressed(Press,0,false);
+			HandleControllerButtonReleased(Press,false);
 			CurrentClickPressed=!DoubleClicked;
 			CurrentDoubleClickPressed=DoubleClicked;
 		}
@@ -191,13 +192,13 @@ if(Owner->PressInputKey.IsValid())
 		if(CurrentClickPressed)
 		{
 			CurrentClickPressed=false;
-			FSlateApplication::Get().OnControllerButtonReleased(Press,0,false);
+			HandleControllerButtonReleased(Press,false);
 		}
 		if(Owner->DoubleClickInputKey.IsValid()&&CurrentDoubleClickPressed)
 		{
 			CurrentDoubleClickPressed=false;
 			const FGamepadKeyNames::Type DoubleClick = Owner->DoubleClickInputKey.GetFName() ;
-			FSlateApplication::Get().OnControllerButtonReleased(DoubleClick,0,false);
+			HandleControllerButtonReleased(DoubleClick,false);
 		}
 	}
 }
@@ -210,23 +211,23 @@ if(HandleEvent)
 	{
 		
 			
-		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, Result.X*Owner->InputScale.X);
-		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, Result.Y*Owner->InputScale.Y);
+		HandleControllerAnalog(XAxis, Result.X*Owner->InputScale.X);
+		HandleControllerAnalog(YAxis, Result.Y*Owner->InputScale.Y);
 		FSlateApplication::Get().SetAllUserFocusToGameViewport();
 		
 		HandleEvent=false;
 	}else
 	{
 		FSlateApplication::Get().SetAllUserFocusToGameViewport();
-		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, 0);
-		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, 0);
+		HandleControllerAnalog(XAxis, 0.f);
+		HandleControllerAnalog(YAxis, 0.f);
 	}
 }else{
 		
 
 		FSlateApplication::Get().SetAllUserFocusToGameViewport();
-		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, 0);
-		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, 0);
+		HandleControllerAnalog(XAxis, 0.f);
+		HandleControllerAnalog(YAxis, 0.f);
 	}
 	float ScaleFactor = TMGetScaleFactor(AllottedGeometry);
 	Owner->VisualCenter = FVector2D(TIResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().X, ScaleFactor), TIResolveRelativePosition(0.5, AllottedGeometry.GetLocalSize().Y, ScaleFactor));
@@ -266,4 +267,38 @@ int32 STitanPannerMinimal::OnPaint(const FPaintArgs& Args, const FGeometry& Allo
 
 	
 	return RetLayerId;
+}
+
+
+bool STitanPannerMinimal::HandleControllerAnalog(FGamepadKeyNames::Type KeyName, float AnalogValue)
+{
+#if ENGINE_MAJOR_VERSION>4 && ENGINE_MINOR_VERSION>0
+	const FInputDeviceId PrimaryInputDevice = IPlatformInputDeviceMapper::Get().GetPrimaryInputDeviceForUser(FSlateApplicationBase::SlateAppPrimaryPlatformUser);
+	return 	FSlateApplication::Get().OnControllerAnalog(KeyName, FSlateApplicationBase::SlateAppPrimaryPlatformUser, PrimaryInputDevice, AnalogValue);
+#elif
+	return 	FSlateApplication::Get().OnControllerAnalog(KeyName, 0, AnalogValue);
+#endif
+	
+}
+
+bool STitanPannerMinimal::HandleControllerButtonPressed(FGamepadKeyNames::Type KeyName, bool IsRepeat)
+{
+#if ENGINE_MAJOR_VERSION>4 && ENGINE_MINOR_VERSION>0
+	const FInputDeviceId PrimaryInputDevice = IPlatformInputDeviceMapper::Get().GetPrimaryInputDeviceForUser(FSlateApplicationBase::SlateAppPrimaryPlatformUser);
+	return 	FSlateApplication::Get().OnControllerButtonPressed(KeyName, FSlateApplicationBase::SlateAppPrimaryPlatformUser, PrimaryInputDevice, IsRepeat);
+	
+#elif
+	return FSlateApplication::Get().OnControllerButtonPressed(KeyName,0,IsRepeat);
+#endif
+}
+
+bool STitanPannerMinimal::HandleControllerButtonReleased(FGamepadKeyNames::Type KeyName, bool IsRepeat)
+{
+#if ENGINE_MAJOR_VERSION>4 && ENGINE_MINOR_VERSION>0
+	const FInputDeviceId PrimaryInputDevice = IPlatformInputDeviceMapper::Get().GetPrimaryInputDeviceForUser(FSlateApplicationBase::SlateAppPrimaryPlatformUser);
+	return 	FSlateApplication::Get().OnControllerButtonReleased(KeyName, FSlateApplicationBase::SlateAppPrimaryPlatformUser, PrimaryInputDevice, IsRepeat);
+	
+#elif
+	return FSlateApplication::Get().OnControllerButtonReleased(KeyName,0,IsRepeat);
+#endif
 }

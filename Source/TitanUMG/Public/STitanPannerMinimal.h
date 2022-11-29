@@ -61,4 +61,7 @@ class TITANUMG_API STitanPannerMinimal : public SLeafWidget
     public:
 
     void SimulateTouch(FVector2D in);
+    static bool HandleControllerAnalog(FGamepadKeyNames::Type KeyName, float AnalogValue);
+    static bool HandleControllerButtonPressed(FGamepadKeyNames::Type KeyName,  bool IsRepeat);
+    static bool HandleControllerButtonReleased(FGamepadKeyNames::Type KeyName,  bool IsRepeat);
 };
