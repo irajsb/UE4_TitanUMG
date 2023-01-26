@@ -18,7 +18,10 @@ class TITANUMG_API UTitanGoogleFontIcon : public UTextBlock
 	UTitanGoogleFontIcon();
 	public:
 	virtual TAttribute<FText> GetDisplayText() override;
+#if WITH_EDITOR
 	virtual void OnCreationFromPalette() override;
+#endif
+	
 	//Character generated from codepoint  used if you want to used elsewhere
 	UPROPERTY(EditAnywhere,Category=Content)
 	FString Output;

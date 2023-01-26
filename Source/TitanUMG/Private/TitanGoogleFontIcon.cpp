@@ -16,7 +16,7 @@ UTitanGoogleFontIcon::UTitanGoogleFontIcon()
 
 
 	
-	Text=FText::FromString("ea22");
+	
 	
 	if(Result.Succeeded())
 	{
@@ -37,8 +37,9 @@ TAttribute<FText> UTitanGoogleFontIcon::GetDisplayText()
 	return FText::FromString(UtfChar);
 }
 
+#if WITH_EDITOR
 void UTitanGoogleFontIcon::OnCreationFromPalette()
 {
-	Text=FText::FromString("ea22");
+	SetText(FText::FromString("ea22"));
 }
-
+#endif
