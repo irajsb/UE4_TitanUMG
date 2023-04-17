@@ -36,9 +36,10 @@ TAttribute<FText> UTitanGoogleFontIcon::GetDisplayText()
 	Output=UtfChar;
 	return FText::FromString(UtfChar);
 }
-
+	#if WITH_EDITOR
 void UTitanGoogleFontIcon::OnCreationFromPalette()
 {
 	Text=FText::FromString("ea22");
 }
 
+#endif
