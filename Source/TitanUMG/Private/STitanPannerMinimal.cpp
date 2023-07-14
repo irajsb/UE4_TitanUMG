@@ -68,16 +68,17 @@ FReply STitanPannerMinimal::OnTouchStarted(const FGeometry& MyGeometry, const FP
 {
 	
 	
-	NumofTouches++;
-	if(NumofTouches==1)
+	
+	if(TouchIndex==-1)
 	{
 		
-
+	TouchIndex=Event.GetPointerIndex();
 	Index1Location=MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition() );
+		return FReply::Handled().CaptureMouse(SharedThis(this));
 	
 	}
 
-	return FReply::Handled().CaptureMouse(SharedThis(this));
+	return FReply::Unhandled();
 
 }
 
@@ -86,46 +87,44 @@ FReply STitanPannerMinimal::OnTouchMoved(const FGeometry& MyGeometry, const FPoi
 const FVector2D TouchLocation=	MyGeometry.AbsoluteToLocal( Event.GetScreenSpacePosition());
 
 	
-		if(NumofTouches==1)
+		if(TouchIndex==Event.GetPointerIndex())
 		{
 			Result=	Index1Location-TouchLocation ;
 			HandleEvent=true;
 			Index1Location= TouchLocation;
+			return FReply::Handled();
 		}
 		
 		
 	
- if(NumofTouches==2)
-	{
- 	
-	}
 
 	
-	return FReply::Handled();
+	return FReply::Unhandled();
 	
 }
 
 FReply STitanPannerMinimal::OnTouchEnded(const FGeometry& MyGeometry, const FPointerEvent& Event)
-{if(NumofTouches==2)
 {
+
+
 	
-}
-
-
 	
 	if(NumofTouches>1)
 	{
 		Result=FVector2D::ZeroVector;
 	}
-	NumofTouches--;
 
-
-
+	
 	DoubleClicked=false;
 		
-	
-	return FReply::Handled().ReleaseMouseCapture();
-	
+	if(TouchIndex!=-1&&Event.GetPointerIndex()==TouchIndex)
+	{
+		Result=FVector2D::ZeroVector;
+		TouchIndex=-1;
+		return FReply::Handled().ReleaseMouseCapture();
+	}
+
+	return  FReply::Unhandled();
 }
 
 FReply STitanPannerMinimal::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
@@ -173,7 +172,7 @@ void STitanPannerMinimal::Tick(const FGeometry& AllottedGeometry, const double I
 	
 if(Owner->PressInputKey.IsValid())
 {
-	if(NumofTouches!=0)
+	if(TouchIndex!=-1)
 	{
 		const FGamepadKeyNames::Type Press =DoubleClicked?Owner->DoubleClickInputKey.GetFName(): Owner->PressInputKey.GetFName() ;
 		if(DoubleClicked?!CurrentDoubleClickPressed:!CurrentClickPressed)
@@ -206,25 +205,25 @@ if(Owner->PressInputKey.IsValid())
 
 if(HandleEvent)
 {
-	if(NumofTouches==1)
+	if(TouchIndex!=-1)
 	{
 		
 			
 		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, Result.X*Owner->InputScale.X);
 		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, Result.Y*Owner->InputScale.Y);
-		FSlateApplication::Get().SetAllUserFocusToGameViewport();
+		
 		
 		HandleEvent=false;
 	}else
 	{
-		FSlateApplication::Get().SetAllUserFocusToGameViewport();
+		
 		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, 0);
 		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, 0);
 	}
 }else{
 		
 
-		FSlateApplication::Get().SetAllUserFocusToGameViewport();
+		
 		FSlateApplication::Get().OnControllerAnalog(XAxis, 0, 0);
 		FSlateApplication::Get().OnControllerAnalog(YAxis, 0, 0);
 	}
@@ -258,7 +257,7 @@ int32 STitanPannerMinimal::OnPaint(const FPaintArgs& Args, const FGeometry& Allo
             Owner->VisualCenter - FVector2D(CorrectedVisualSize.X * 0.5f, CorrectedVisualSize.Y * 0.5f),
             CorrectedVisualSize),
             Owner->Image1->GetSlateBrush(),
-            ESlateDrawEffect::None,NumofTouches>0?Owner->ActiveColor:Owner->DeActiveColor
+            ESlateDrawEffect::None,TouchIndex>-1?Owner->ActiveColor:Owner->DeActiveColor
             
             );
 	}

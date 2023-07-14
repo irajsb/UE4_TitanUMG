@@ -43,6 +43,8 @@ class TITANUMG_API STitanPannerMinimal : public SLeafWidget
     bool CurrentClickPressed;
     bool CurrentDoubleClickPressed;
     uint8 NumofTouches;
+    int TouchIndex=-1;
+    bool IsCapturing;
     bool HandleEvent;
     FVector2D Result;
     FVector2D Index1Location;

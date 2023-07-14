@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/RichTextBlockImageDecorator.h"
 #include "Components/TextBlock.h"
 #include "TitanGoogleFontIcon.generated.h"
+
+
 
 /**
  * https://fonts.google.com/icons
@@ -18,9 +21,10 @@ class TITANUMG_API UTitanGoogleFontIcon : public UTextBlock
 	UTitanGoogleFontIcon();
 	public:
 	virtual TAttribute<FText> GetDisplayText() override;
-	#if WITH_EDITOR
+#if WITH_EDITOR
 	virtual void OnCreationFromPalette() override;
-	#endif
+#endif
+	
 	//Character generated from codepoint  used if you want to used elsewhere
 	UPROPERTY(EditAnywhere,Category=Content)
 	FString Output;
